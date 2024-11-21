@@ -12,7 +12,7 @@ export const TIMER_PRESETS: TimerPreset[] = [
     display: "Pomodoro",
   },
   {
-    value: 2,
+    value: 300,
     display: "Short Break",
   },
   {

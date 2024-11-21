@@ -26,11 +26,12 @@ function PomodoroControl() {
           //  when timer ends play notification sound
           playPomodoroNotificationSound()
           // show toast msg based on the selected timer when timer stops
-          toast({
-            title: isActiveButton && pomodoroToastMessages[isActiveButton],
-          })
+          if (isActiveButton) {
+            toast({
+              title: pomodoroToastMessages[isActiveButton],
+            })
+          }
           clearInterval(intervalId)
-          // reset play button
           setIsTimerRunning(false)
           // set button to play when timer stops
           setActiveButton("")
@@ -55,11 +56,13 @@ function PomodoroControl() {
   // start and pause timer
   const handleTimerToggle = () => {
     //if no timer selected show notification
-    !time
-      ? toast({
-          title: "You need to set a timer first",
-        })
-      : setIsTimerRunning(!isTimerRunning)
+    if (!time) {
+      toast({
+        title: "You need to set a timer first",
+      })
+    } else {
+      setIsTimerRunning(!isTimerRunning)
+    }
   }
 
   const handleTimerReset = () => {
@@ -71,10 +74,10 @@ function PomodoroControl() {
 
   return (
     <div>
-      <h2 className="text-center text-3xl md:text-4xl  font-bold py-9">
+      <h2 className="text-center text-3xl md:text-4xl font-bold py-9">
         Pomodoro Timer
       </h2>
-      <div className="flex flex-col gap-10  mx-auto  items-center">
+      <div className="flex flex-col gap-10  mx-auto items-center">
         <div className="flex items-center justify-evenly gap-4 md:gap-8 flex-wrap ">
           {TIMER_PRESETS.map(({ value, display }) => (
             <div key={display}>
