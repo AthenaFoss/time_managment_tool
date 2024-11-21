@@ -1,6 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button"
-import { TIMER_PRESETS } from "@/lib/utils"
+import { convertSecondsToMMSS, TIMER_PRESETS } from "@/lib/utils"
 import PomodoroClock from "./pomodoroClock"
 import { useEffect, useState } from "react"
 
@@ -23,6 +23,10 @@ function PomodoroControl() {
         }
       }
     }, 1000)
+
+    if (isTimerRunning) {
+      document.title = `${convertSecondsToMMSS(time)} - remaining`
+    }
 
     return () => clearInterval(intervalId)
   }, [isTimerRunning, time])
