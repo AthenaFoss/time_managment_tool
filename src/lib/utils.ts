@@ -1,11 +1,12 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { TimerPreset } from "./definitions"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const TIMER_PRESETS = [
+export const TIMER_PRESETS: TimerPreset[] = [
   {
     value: 1500,
     display: "Pomodoro",
@@ -34,4 +35,11 @@ export const playPomodoroNotificationSound = () => {
   return audio.play().catch((error) => {
     console.error("Error playing notification sound:", error)
   })
+}
+
+export const pomodoroToastMessages = {
+  Pomodoro:
+    "Great job! You've completed your focus session. Time to take a break!",
+  "Short Break": "Break's over! Ready to dive back in?",
+  "Long Break": "Well done! You've earned a longer break. Relax and recharge.",
 }

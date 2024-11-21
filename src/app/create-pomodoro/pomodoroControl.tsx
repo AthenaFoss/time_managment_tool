@@ -3,14 +3,19 @@ import { Button } from "@/components/ui/button"
 import {
   convertSecondsToMMSS,
   playPomodoroNotificationSound,
+  pomodoroToastMessages,
   TIMER_PRESETS,
 } from "@/lib/utils"
 import PomodoroClock from "./pomodoroClock"
 import { useEffect, useState } from "react"
+import { useToast } from "@/hooks/use-toast"
+import { TimerMessageKey } from "@/lib/definitions"
 
 function PomodoroControl() {
   const [time, setTime] = useState(0)
   const [isTimerRunning, setIsTimerRunning] = useState(false)
+  const [isActiveButton, setActiveButton] = useState<TimerMessageKey | "">("")
+  const { toast } = useToast()
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -18,13 +23,17 @@ function PomodoroControl() {
         if (time > 0) {
           setTime(time - 1)
         } else if (time === 0 && isTimerRunning) {
-          //  when timer end play notification sound
+          //  when timer ends play notification sound
           playPomodoroNotificationSound()
-          // show toast msg when timer stops
-          alert("Timer finished")
+          // show toast msg based on the selected timer when timer stops
+          toast({
+            title: isActiveButton && pomodoroToastMessages[isActiveButton],
+          })
           clearInterval(intervalId)
           // reset play button
           setIsTimerRunning(false)
+          // set button to play when timer stops
+          setActiveButton("")
         }
       }
     }, 1000)
@@ -37,22 +46,27 @@ function PomodoroControl() {
   }, [isTimerRunning, time])
 
   // select between pomodoro | short break | long break
-  const selectTimer = (value: number) => {
+  const selectTimer = (value: number, display: TimerMessageKey) => {
     setIsTimerRunning(false)
     setTime(value)
+    setActiveButton(display)
   }
 
   // start and pause timer
   const handleTimerToggle = () => {
     //if no timer selected show notification
     !time
-      ? alert("You need to set a timer first")
+      ? toast({
+          title: "You need to set a timer first",
+        })
       : setIsTimerRunning(!isTimerRunning)
   }
 
   const handleTimerReset = () => {
     setIsTimerRunning(false)
     setTime(TIMER_PRESETS[0].value)
+    // change to app name
+    document.title = "Pomodoro Timer"
   }
 
   return (
@@ -64,7 +78,12 @@ function PomodoroControl() {
         <div className="flex items-center justify-evenly gap-4 md:gap-8 flex-wrap ">
           {TIMER_PRESETS.map(({ value, display }) => (
             <div key={display}>
-              <Button onClick={() => selectTimer(value)}>{display}</Button>
+              <Button
+                onClick={() => selectTimer(value, display)}
+                variant={`${isActiveButton === display ? "default" : "outline"}`}
+              >
+                {display}
+              </Button>
             </div>
           ))}
         </div>
