@@ -1,4 +1,6 @@
+import PomodoroControl from "./pomodoroControl"
+
 function page() {
-  return <div>Create Pomodoro</div>
+  return <PomodoroControl />
 }
 export default page
