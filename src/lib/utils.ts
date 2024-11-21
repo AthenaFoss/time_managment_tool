@@ -19,3 +19,12 @@ export const TIMER_PRESETS = [
     display: "Long Break",
   },
 ]
+
+export const convertSecondsToMMSS = (time: number) => {
+  const format = (value: number) => {
+    return value < 10 ? `0${value}` : value
+  }
+  const minutes = Math.floor(time / 60)
+  const seconds = time % 60
+  return `${format(minutes)}:${format(seconds)}`
+}
