@@ -1,6 +1,10 @@
 "use client"
 import { Button } from "@/components/ui/button"
-import { convertSecondsToMMSS, TIMER_PRESETS } from "@/lib/utils"
+import {
+  convertSecondsToMMSS,
+  playPomodoroNotificationSound,
+  TIMER_PRESETS,
+} from "@/lib/utils"
 import PomodoroClock from "./pomodoroClock"
 import { useEffect, useState } from "react"
 
@@ -14,7 +18,8 @@ function PomodoroControl() {
         if (time > 0) {
           setTime(time - 1)
         } else if (time === 0 && isTimerRunning) {
-          //    play notification sound
+          //  when timer end play notification sound
+          playPomodoroNotificationSound()
           // show toast msg when timer stops
           alert("Timer finished")
           clearInterval(intervalId)

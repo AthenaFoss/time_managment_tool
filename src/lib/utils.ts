@@ -28,3 +28,10 @@ export const convertSecondsToMMSS = (time: number) => {
   const seconds = time % 60
   return `${format(minutes)}:${format(seconds)}`
 }
+
+export const playPomodoroNotificationSound = () => {
+  const audio = new Audio("/pomodoroSound.mp3")
+  return audio.play().catch((error) => {
+    console.error("Error playing notification sound:", error)
+  })
+}
