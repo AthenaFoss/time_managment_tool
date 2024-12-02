@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import {
+  convertSecondsToMMSS,
   playPomodoroNotificationSound,
   pomodoroToastMessages,
   TIMER_PRESETS,
@@ -38,6 +39,10 @@ function PomodoroControl() {
         }
       }
     }, 1000)
+
+    if (isTimerRunning) {
+      document.title = `${convertSecondsToMMSS(time)} - remaining`
+    }
 
     return () => clearInterval(intervalId)
   }, [isTimerRunning, time])
