@@ -69,6 +69,7 @@ function PomodoroControl() {
   const handleTimerReset = () => {
     setIsTimerRunning(false)
     setTime(TIMER_PRESETS[0].value)
+    setActiveButton(TIMER_PRESETS[0].display)
     // change to app name
     document.title = "Pomodoro Timer"
   }
