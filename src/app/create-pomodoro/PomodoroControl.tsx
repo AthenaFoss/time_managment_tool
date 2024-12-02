@@ -52,6 +52,8 @@ function PomodoroControl() {
     setIsTimerRunning(false)
     setTime(value)
     setActiveButton(display)
+    // change to app name
+    document.title = "Time Management Tool"
   }
 
   // start and pause timer
@@ -71,7 +73,7 @@ function PomodoroControl() {
     setTime(TIMER_PRESETS[0].value)
     setActiveButton(TIMER_PRESETS[0].display)
     // change to app name
-    document.title = "Pomodoro Timer"
+    document.title = "Time Management Tool"
   }
 
   return (
