@@ -11,11 +11,15 @@ import PomodoroClock from "./PomodoroClock"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { TimerMessageKey } from "@/lib/types"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { CircleStop, Pause, Play, TimerReset } from "lucide-react"
 
 function PomodoroControl() {
-  const [time, setTime] = useState(0)
+  const [time, setTime] = useState(1500)
   const [isTimerRunning, setIsTimerRunning] = useState(false)
-  const [isActiveButton, setActiveButton] = useState<TimerMessageKey | "">("")
+  const [isActiveButton, setActiveButton] = useState<TimerMessageKey | "">(
+    "Pomodoro"
+  )
   const { toast } = useToast()
 
   useEffect(() => {
@@ -77,32 +81,31 @@ function PomodoroControl() {
   }
 
   return (
-    <div>
-      <h2 className="text-center text-3xl md:text-4xl font-bold py-9">
-        Pomodoro Timer
-      </h2>
-      <div className="flex flex-col gap-10  mx-auto items-center">
-        <div className="flex items-center justify-evenly gap-4 md:gap-8 flex-wrap ">
-          {TIMER_PRESETS.map(({ value, display }) => (
-            <div key={display}>
-              <Button
-                onClick={() => selectTimer(value, display)}
-                variant={`${isActiveButton === display ? "default" : "outline"}`}
-              >
-                {display}
-              </Button>
-            </div>
-          ))}
-        </div>
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-evenly gap-4 md:gap-8 flex-wrap ">
+        {TIMER_PRESETS.map(({ value, display }) => (
+          <div key={display}>
+            <Button
+              onClick={() => selectTimer(value, display)}
+              variant={`${isActiveButton === display ? "default" : "outline"}`}
+            >
+              {display}
+            </Button>
+          </div>
+        ))}
+      </CardHeader>
+      <CardContent className="flex justify-center">
         <PomodoroClock currentTime={time} />
-        <div className="flex items-center gap-3 md:gap-10">
-          <Button onClick={handleTimerToggle}>
-            {!isTimerRunning ? "Play" : time === 0 ? "Stop" : "Pause"}
-          </Button>
-          <Button onClick={handleTimerReset}>Reset</Button>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+      <CardFooter className="justify-center gap-4">
+        <Button variant="ghost" onClick={handleTimerToggle}>
+          {!isTimerRunning ? <Play /> : time === 0 ? <CircleStop /> : <Pause />}
+        </Button>
+        <Button variant="ghost" onClick={handleTimerReset}>
+          <TimerReset />
+        </Button>
+      </CardFooter>
+    </Card>
   )
 }
 export default PomodoroControl

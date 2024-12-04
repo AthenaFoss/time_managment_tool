@@ -22,6 +22,7 @@ import { createTask } from "@/actions/createTask"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Task, TaskSchema } from "@/lib/schemas/task"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
 
 export function CreateTaskForm() {
   const { toast } = useToast()
@@ -31,9 +32,7 @@ export function CreateTaskForm() {
     resolver: zodResolver(TaskSchema),
     defaultValues: {
       activity: "",
-      priority: 1,
-      urgent: false,
-      important: false,
+      priority: "normal",
       timeUnder5Min: false,
     },
   })
@@ -72,7 +71,7 @@ export function CreateTaskForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Create New Task</CardTitle>
+        <CardTitle className="uppercase">Create New Task</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -95,90 +94,72 @@ export function CreateTaskForm() {
                 </FormItem>
               )}
             />
+            <div className="flex items-center space-x-2">
+              <FormField
+                control={form.control}
+                name="timeUnder5Min"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl className="flex items-center justify-center">
+                      <Checkbox
+                        id="timeUnder5Min"
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Label htmlFor="time">Takes under 5 minutes</Label>
+            </div>
             <FormField
               control={form.control}
               name="priority"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="space-y-3">
                   <FormLabel>Priority</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="number"
-                      placeholder="Enter your priority"
-                      disabled={isSubmitting}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
-                    />
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="urgent" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Urgent
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="important" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Important
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="normal" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Normal
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            <div className="flex flex-wrap gap-4">
-              <div className="flex items-center space-x-2">
-                <FormField
-                  control={form.control}
-                  name="urgent"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl className="flex items-center justify-center">
-                        <Checkbox
-                          id="urgent"
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Label htmlFor="important">Urgent</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <FormField
-                  control={form.control}
-                  name="important"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl className="flex items-center justify-center">
-                        <Checkbox
-                          id="important"
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Label htmlFor="important">Important</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <FormField
-                  control={form.control}
-                  name="timeUnder5Min"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl className="flex items-center justify-center">
-                        <Checkbox
-                          id="timeUnder5Min"
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Label htmlFor="time">Takes under 5 minutes</Label>
-              </div>
-            </div>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button className="w-full" type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (
-                "Add Task"
+                "Create Task"
               )}
             </Button>
           </form>
