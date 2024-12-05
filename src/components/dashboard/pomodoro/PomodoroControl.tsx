@@ -11,8 +11,9 @@ import PomodoroClock from "./PomodoroClock"
 import { useEffect, useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { TimerMessageKey } from "@/lib/types"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { CircleStop, Pause, Play, TimerReset } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 function PomodoroControl() {
   const [time, setTime] = useState(1500)
@@ -49,7 +50,7 @@ function PomodoroControl() {
     }
 
     return () => clearInterval(intervalId)
-  }, [isTimerRunning, time])
+  }, [isActiveButton, isTimerRunning, time, toast])
 
   // select between pomodoro | short break | long break
   const selectTimer = (value: number, display: TimerMessageKey) => {
@@ -81,30 +82,42 @@ function PomodoroControl() {
   }
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-evenly gap-4 md:gap-8 flex-wrap ">
-        {TIMER_PRESETS.map(({ value, display }) => (
-          <div key={display}>
-            <Button
-              onClick={() => selectTimer(value, display)}
-              variant={`${isActiveButton === display ? "default" : "outline"}`}
-            >
-              {display}
-            </Button>
-          </div>
-        ))}
-      </CardHeader>
-      <CardContent className="flex justify-center">
-        <PomodoroClock currentTime={time} />
+    <Card className="w-full max-w-md mx-auto">
+      <CardContent className="pt-6 space-y-4">
+        <Tabs defaultValue="Pomodoro">
+          <TabsList className="w-full">
+            {TIMER_PRESETS.map(({ value, display }) => (
+              <TabsTrigger
+                key={value}
+                value={display}
+                className="flex-1"
+                onClick={() => selectTimer(value, display)}
+              >
+                {display}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {TIMER_PRESETS.map(({ value, display }) => (
+            <TabsContent className="mt-4 justify-items-center" key={value} value={display}>
+              <PomodoroClock currentTime={time} />
+            </TabsContent>
+          ))}
+        </Tabs>
+        <div className="flex justify-center space-x-2">
+          <Button variant="outline" onClick={handleTimerToggle}>
+            {!isTimerRunning ? (
+              <Play />
+            ) : time === 0 ? (
+              <CircleStop />
+            ) : (
+              <Pause />
+            )}
+          </Button>
+          <Button variant="outline" onClick={handleTimerReset}>
+            <TimerReset />
+          </Button>
+        </div>
       </CardContent>
-      <CardFooter className="justify-center gap-4">
-        <Button variant="ghost" onClick={handleTimerToggle}>
-          {!isTimerRunning ? <Play /> : time === 0 ? <CircleStop /> : <Pause />}
-        </Button>
-        <Button variant="ghost" onClick={handleTimerReset}>
-          <TimerReset />
-        </Button>
-      </CardFooter>
     </Card>
   )
 }

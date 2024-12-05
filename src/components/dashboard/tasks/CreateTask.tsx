@@ -18,13 +18,15 @@ import { useToast } from "@/hooks/use-toast"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { createTask } from "@/actions/createTask"
+import { createTask } from "@/actions/tasks/createTask"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Task, TaskSchema } from "@/lib/schemas/task"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
+import { RadioGroup, RadioGroupItem } from "../../ui/radio-group"
+import { useTasks } from "@/context/TaskContext"
 
 export function CreateTaskForm() {
+  const { fetchTasks } = useTasks()
   const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -46,6 +48,7 @@ export function CreateTaskForm() {
           toast({
             title: "Task created successfully!",
           })
+          fetchTasks()
         }
         if (response.error) {
           toast({
@@ -129,25 +132,19 @@ export function CreateTaskForm() {
                         <FormControl>
                           <RadioGroupItem value="urgent" />
                         </FormControl>
-                        <FormLabel className="font-normal">
-                          Urgent
-                        </FormLabel>
+                        <FormLabel className="font-normal">Urgent</FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="important" />
                         </FormControl>
-                        <FormLabel className="font-normal">
-                          Important
-                        </FormLabel>
+                        <FormLabel className="font-normal">Important</FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="normal" />
                         </FormControl>
-                        <FormLabel className="font-normal">
-                          Normal
-                        </FormLabel>
+                        <FormLabel className="font-normal">Normal</FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
