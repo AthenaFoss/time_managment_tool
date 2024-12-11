@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import {
   convertSecondsToMMSS,
+  DEFAULT_TIME,
   playPomodoroNotificationSound,
   pomodoroToastMessages,
   TIMER_PRESETS,
@@ -16,7 +17,7 @@ import { CircleStop, Pause, Play, TimerReset } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 function PomodoroControl() {
-  const [time, setTime] = useState(1500)
+  const [time, setTime] = useState(DEFAULT_TIME)
   const [isTimerRunning, setIsTimerRunning] = useState(false)
   const [isActiveButton, setActiveButton] = useState<TimerMessageKey | "">(
     "Pomodoro"
